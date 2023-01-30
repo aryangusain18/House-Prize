@@ -1,0 +1,35 @@
+<!-- form.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="/static/styleform.css">
+  <title>House Price Prediction</title>
+</head>
+<body>
+  <h1>House Price Prediction</h1>
+  <p>Enter the house features to get a prediction of the price:</p>
+
+  <!-- Form for inputting the house features -->
+  <div class="form-container">
+    <form method="post" action="/predict">
+      <label for="location">Location</label><br>
+      <select class="selectpicker form-control" id="location" name="location" required="1">
+        {% for location in locations %}
+            <option value="{{location}}">{{location}}</option>
+        {% endfor %}  
+       </select><br>
+      <label for="square_feet">Square Feet</label><br>
+      <input type="number" min="0"  id="square_feet" name="total_sqft" required><br>
+      <label for="bedrooms">Bedrooms</label><br>
+      <input type="text" min="0"  id="bedrooms" name="bhk"required><br>
+      <label for="bathrooms">Bathrooms</label><br>
+      <input type="text"  min="0" id="bathrooms" name="bath" required><br><br>
+      <input type="submit" value="Predict">
+    </form>  
+  </div>
+  
+ 
+  
+</body>
+</html>
+

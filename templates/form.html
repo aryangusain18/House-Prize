@@ -1,0 +1,51 @@
+<!-- form.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="/static/styleform.css">
+  <title>House Price Prediction</title>
+</head>
+<body>
+  <font color="blue">  
+    JavaTpoint   <br>  
+    </font>  
+  <h1>Housing Price Prediction</h1>
+  <p>Enter the house features to get a prediction of the price:</p>
+
+  <!-- Form for inputting the house features -->
+  <form method="post" action="/predict">
+    <label for="square_feet">Square Feet</label><br>
+    <input type="text" id="square_feet" name="square_feet"><br>
+    <label for="bedrooms">Bedrooms</label><br>
+    <input type="text" id="bedrooms" name="bedrooms"><br>
+    <label for="bathrooms">Bathrooms</label><br>
+    <input type="text" id="bathrooms" name="bathrooms"><br><br>
+    <input type="submit" value="Predict">
+  </form> 
+</body>
+</html>
+
+This code loads a dataset containing house prices and features (such as number of bedrooms and square footage), splits the data into features and target, and trains a random forest regressor model to predict the house prices based on the features. The predict() function runs the model and returns the prediction for a given input data.
+
+Then, it creates a Flask app and defines a route /predict that handles GET and POST requests. When a GET request is received, it renders the form.html template, which contains a form for inputting the house features. When a POST request is received, it converts the input data to a Pandas DataFrame, runs the predict() function, and renders the result.html template with the prediction result.
+
+You can use the following templates and static files (such as CSS and JavaScript) to create a more interactive and visually appealing UI for your machine learning model:
+
+
+def remove_bhk_outliers(df):
+    exclude_indices = np.array([])
+    for location, location_df in df.groupby('location'):
+        bhk_stats = {}
+        for bhk, bhk_df in location_df.groupby('BHK'):
+            bhk_stats[bhk] = {
+                'mean': np.mean(bhk_df.price_per_sqft),
+                'std': np.std(bhk_df.price_per_sqft),
+                'count': bhk_df.shape[0]
+            }
+        for bhk, bhk_df in location_df.groupby('BHK'):
+            stats = bhk_stats.get(bhk-1)
+            if stats and stats['count']>5:
+                exclude_indices = np.append(exclude_indices, bhk_df[bhk_df.price_per_sqft<(stats['mean'])].index.values)
+    return df.drop(exclude_indices,axis='index')
+df = remove_bhk_outliers(df)
+df.shape
